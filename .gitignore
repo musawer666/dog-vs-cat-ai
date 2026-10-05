@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+uploads/
+test.jpg
+*.keras
+confusion_matrix.png
+training_accuracy.png
+training_loss.png
+.vscode/
+Cat/
+Dog/

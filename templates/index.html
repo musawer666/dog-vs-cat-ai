@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0b1020">
+    <title>Cat vs Dog AI | Image Classifier</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</head>
+
+<body>
+    <main class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="/" aria-label="Cat vs Dog AI home">
+                <span class="brand-mark" aria-hidden="true">✦</span>
+                <span>Vision<span class="brand-accent">AI</span></span>
+            </a>
+            <span class="header-status"><span class="status-dot"></span> Image classifier</span>
+        </header>
+
+        <section class="hero" aria-labelledby="page-title">
+            <div class="eyebrow"><span class="eyebrow-line"></span> SIMPLE. SMART. INSTANT.</div>
+            <h1 id="page-title">A closer look at<br><span>cats and dogs.</span></h1>
+            <p class="hero-copy">Drop in a photo and let our AI tell you who's in the picture.</p>
+        </section>
+
+        <section class="workspace" aria-label="Image classifier">
+            <div class="workspace-heading">
+                <div>
+                    <span class="section-kicker">IMAGE CLASSIFIER</span>
+                    <h2>Make a prediction</h2>
+                </div>
+                <span class="model-badge"><span aria-hidden="true">✳</span> CNN model</span>
+            </div>
+
+            <form class="upload-form" method="POST" enctype="multipart/form-data">
+                <label class="upload-box" id="drop-zone" for="image-input" tabindex="0">
+                    <input
+                        class="file-input"
+                        id="image-input"
+                        type="file"
+                        name="image"
+                        accept="image/*"
+                        required
+                    >
+                    <span class="upload-content" id="upload-content">
+                        <span class="upload-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4.5A1.5 1.5 0 0 0 6.5 20h11a1.5 1.5 0 0 0 1.5-1.5V14" />
+                            </svg>
+                        </span>
+                        <span class="upload-title">Drop your image here</span>
+                        <span class="upload-hint">or <span class="browse-link">browse files</span> on your device</span>
+                        <span class="upload-formats">JPG, PNG, WEBP and other image formats</span>
+                    </span>
+                    <span class="selected-preview" id="selected-preview" hidden>
+                        <img id="preview-image" alt="Selected image preview">
+                        <span class="selected-name" id="selected-name"></span>
+                        <span class="preview-change">Choose a different image</span>
+                    </span>
+                </label>
+
+                <button class="predict-button" id="predict-button" type="submit">
+                    <span class="button-label">Predict image</span>
+                    <span class="button-loading" aria-live="polite" hidden>
+                        <span class="spinner" aria-hidden="true"></span>
+                        Analyzing Image...
+                    </span>
+                    <span class="button-arrow" aria-hidden="true">→</span>
+                </button>
+            </form>
+
+            {% if error %}
+            <div class="error-message" role="alert">
+                <span aria-hidden="true">!</span>
+                {{ error }}
+            </div>
+            {% endif %}
+
+            {% if prediction %}
+            <section class="result-card" aria-labelledby="result-heading">
+                <div class="result-topline">
+                    <span class="result-indicator"><span></span> ANALYSIS COMPLETE</span>
+                    <span class="result-sparkle" aria-hidden="true">✦</span>
+                </div>
+                <div class="result-layout">
+                    <div class="result-details">
+                        <h2 id="result-heading">It's a <span class="prediction">{{ prediction }}</span></h2>
+                        <p class="result-description">The AI has analyzed your image and made its prediction.</p>
+                        <div class="confidence-section">
+                            <div class="confidence-heading">
+                                <span>AI confidence</span>
+                                <strong>{{ "%.2f"|format(confidence) }}%</strong>
+                            </div>
+                            <div
+                                class="confidence-track"
+                                role="progressbar"
+                                aria-label="AI confidence"
+                                aria-valuemin="0"
+                                aria-valuemax="100"
+                                aria-valuenow="{{ confidence }}"
+                            >
+                                <div class="confidence-fill" data-confidence="{{ confidence }}"></div>
+                            </div>
+                        </div>
+                        <a class="try-again-button" href="/">
+                            <span aria-hidden="true">↻</span> Try another image
+                        </a>
+                    </div>
+                    {% if image_path %}
+                    <div class="result-image-wrap">
+                        <img class="result-image" src="{{ image_path }}" alt="Image analyzed by the classifier">
+                        <span class="image-caption">YOUR IMAGE</span>
+                    </div>
+                    {% endif %}
+                </div>
+            </section>
+            {% endif %}
+        </section>
+
+        <section class="how-it-works" aria-labelledby="how-heading">
+            <div class="how-heading">
+                <span class="section-kicker">THREE SIMPLE STEPS</span>
+                <h2 id="how-heading">How it works</h2>
+            </div>
+            <div class="steps">
+                <article class="step-card">
+                    <span class="step-number">01</span>
+                    <span class="step-icon" aria-hidden="true">↥</span>
+                    <h3>Upload image</h3>
+                    <p>Choose a cat or dog photo from your device.</p>
+                </article>
+                <article class="step-card">
+                    <span class="step-number">02</span>
+                    <span class="step-icon" aria-hidden="true">◌</span>
+                    <h3>AI analyzes</h3>
+                    <p>The CNN model looks for visual patterns.</p>
+                </article>
+                <article class="step-card">
+                    <span class="step-number">03</span>
+                    <span class="step-icon" aria-hidden="true">✧</span>
+                    <h3>CNN predicts</h3>
+                    <p>See whether it's a Cat or Dog, with confidence.</p>
+                </article>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <a class="footer-brand" href="/">Vision<span>AI</span></a>
+            <p>Powered by <strong>TensorFlow + Flask</strong></p>
+            <p>AI Image Classification Project</p>
+        </footer>
+    </main>
+</body>
+
+</html>
